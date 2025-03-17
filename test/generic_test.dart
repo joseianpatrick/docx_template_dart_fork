@@ -20,6 +20,7 @@ void main() {
 
     final contentList = <Content>[];
 
+    print(docx.getTags());
     final b = listBold.iterator;
     for (var n in listNormal) {
       b.moveNext();
@@ -37,8 +38,8 @@ void main() {
         text: "My new link",
         url: "https://www.youtube.com/",
       ))
-      ..add(TextContent("header", "Nice header"))
-      ..add(TextContent("footer", "Nice footer"))
+      // ..add(TextContent("header", "Nice header"))
+      // ..add(TextContent("footer", "Nice footer"))
       ..add(TextContent("docname", "Simple docname"))
       ..add(TextContent("passport", "Passport NE0323 4456673"))
       ..add(TableContent("table", [

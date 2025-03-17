@@ -147,6 +147,10 @@ class TextView extends View<TextContent?> {
             r.children.insert(pasteIndex++, tCp);
           }
           r.children.insert(pasteIndex++, _brElement());
+
+          if (l != lines.last) {
+            r.children.insert(pasteIndex++, _brElement());
+          }
         }
       } else {
         t.children[0] = XmlText(text!);
@@ -432,10 +436,10 @@ class ImgView extends View<ImageContent?> {
           }
         });
       }
-    } else if (vm.imagePolicy == ImagePolicy.remove){
-      final drawing = copy.descendants
-          .firstWhereOrNull((e) => e is XmlElement && e.name.local == 'drawing');
-      if (drawing != null ) {
+    } else if (vm.imagePolicy == ImagePolicy.remove) {
+      final drawing = copy.descendants.firstWhereOrNull(
+          (e) => e is XmlElement && e.name.local == 'drawing');
+      if (drawing != null) {
         drawing.parent!.children.remove(drawing);
       }
     }
