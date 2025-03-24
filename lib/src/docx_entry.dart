@@ -80,7 +80,8 @@ class DocxRelsEntry extends DocxXmlEntry {
   }
 
   String nextImageId() {
-    return (_imageId++).toString();
+    _imageId++;
+    return 'image$_imageId';
   }
 
   DocxRel? getRel(String id) {
@@ -111,6 +112,16 @@ class DocxRelsEntry extends DocxXmlEntry {
     if (el != null) {
       el.setAttribute('Type', rel.type);
       el.setAttribute('Target', rel.target);
+    }
+  }
+
+  void remove(String id) {
+    final el = _rels.descendants.firstWhereOrNull((e) =>
+        e is XmlElement &&
+        e.name.local == 'Relationship' &&
+        e.getAttribute('Id') == id);
+    if (el != null) {
+      el.parent!.children.remove(el);
     }
   }
 
