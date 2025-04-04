@@ -12,6 +12,7 @@ void main() {
     }
     final f = File("template.docx");
     final docx = await DocxTemplate.fromBytes(await f.readAsBytes());
+
     final testFileContent = await File('test.jpg').readAsBytes();
     final test2FileContent = await File('test2.jpg').readAsBytes();
 
