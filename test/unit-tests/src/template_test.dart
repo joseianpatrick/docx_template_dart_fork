@@ -8,7 +8,7 @@ void main() {
     final f = File("template.docx");
     final docx = await DocxTemplate.fromBytes(await f.readAsBytes());
     final list = docx.getTags();
-    print(list);
+    // print(list);
     expect(list.length, 12);
     expect(list.first, 'imgFirst');
     expect(list[1], 'docname');
