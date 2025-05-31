@@ -6,7 +6,6 @@ import 'package:xml/xml.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:archive/archive.dart';
-import 'package:path/path.dart' as path;
 import 'dart:convert';
 import 'package:collection/collection.dart';
 
@@ -26,8 +25,6 @@ class PdfTemplate {
 
     // Lire le contenu du DOCX
     final docxContent = await _readDocxContent(tempDocx.path);
-    print('Contenu lu du DOCX :');
-    print(docxContent);
 
     // Nettoyer le fichier temporaire
     await tempDocx.delete();
@@ -175,15 +172,12 @@ class PdfTemplate {
     // Lire le header
     final headerParagraphs = header.findAllElements('w:p');
     for (var p in headerParagraphs) {
-      print('ttttt');
-      print(p);
+  
       final sdt = p.findElements('w:sdt').firstOrNull;
       if (sdt != null) {
-        final alias = sdt.findElements('w:alias').firstOrNull?.text;
+        final alias = sdt.findElements('w:alias').firstOrNull?.value;
         if (alias == 'header') {
-          print('ffffff');
-          print(sdt);
-          headerText = sdt.findElements('w:sdtContent').firstOrNull?.text;
+          headerText = sdt.findElements('w:sdtContent').firstOrNull?.value;
           break;
         }
       }
@@ -192,7 +186,7 @@ class PdfTemplate {
     // Lire le contenu principal
     final paragraphs = document.findAllElements('w:p');
     for (var p in paragraphs) {
-      final text = p.findElements('w:t').map((t) => t.text).join();
+      final text = p.findElements('w:t').map((t) => t.value).join();
       if (text.isEmpty) continue;
 
       // Chercher le titre (premier paragraphe non vide)
@@ -211,12 +205,6 @@ class PdfTemplate {
       footer = text;
     }
 
-    print('Contenu lu du DOCX :');
-    print('Header: $headerText');
-    print('Title: $title');
-    print('Items: $items');
-    print('Footer: $footer');
-    print('Header image: ${headerImage != null}');
 
     return DocxContent(
       header: headerText,

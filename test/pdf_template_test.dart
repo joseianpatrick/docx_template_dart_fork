@@ -1,7 +1,7 @@
-import 'package:docx_template/docx_template.dart';
-import 'package:docx_template/src/pdf_template.dart';
 import 'dart:io';
 
+import 'package:docx_template/docx_template.dart';
+import 'package:docx_template/src/pdf_template.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -25,6 +25,6 @@ void main() {
     // Sauvegarder le PDF pour inspection manuelle
     final file = File('test_output.pdf');
     await file.writeAsBytes(pdfBytes);
-    print('PDF généré et sauvegardé dans : ${file.absolute.path}');
+    // print('PDF généré et sauvegardé dans : [39m${file.absolute.path}');
   });
 }

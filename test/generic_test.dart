@@ -21,7 +21,6 @@ void main() {
 
     final contentList = <Content>[];
 
-    print(docx.getTags());
     final b = listBold.iterator;
     for (var n in listNormal) {
       b.moveNext();

@@ -1,7 +1,7 @@
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:docx_template/src/model.dart';
 import 'dart:typed_data';
+
+import 'package:docx_template/src/model.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 abstract class PdfView<T extends Content?> {
   final String tag;
@@ -22,7 +22,7 @@ class PdfTextView extends PdfView<TextContent?> {
     if (content == null) return pw.Container();
 
     return pw.Text(
-      content.text ?? '',
+      content.text,
       style: pw.TextStyle(
         fontSize: 12,
         font: pw.Font.helvetica(),
