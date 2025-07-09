@@ -26,10 +26,7 @@ abstract class DocxEntry {
     if (_index < 0) {
       arch.addFile(ArchiveFile(_name, data.length, data));
     } else {
-      final f = List<ArchiveFile>.from(arch.files);
-      f[_index] = ArchiveFile(_name, data.length, data);
-      arch.files.clear();
-      arch.files.addAll(f);
+      arch.files[_index] = ArchiveFile(_name, data.length, data);
       // arch.modifyAtIndex(_index, ArchiveFile(_name, data.length, data));
     }
   }
