@@ -114,4 +114,61 @@ void main() {
     if (d != null) await fileGenerated.writeAsBytes(d);
     expect(await fileGenerated.exists(), true);
   });
+
+  test('generate dox test2', () async {
+    final fileGenerated = File('generated2.docx');
+    if (fileGenerated.existsSync()) {
+      await fileGenerated.delete();
+    }
+    final f = File("test2.docx");
+    final docx = await DocxTemplate.fromBytes(await f.readAsBytes());
+
+    // Build comprehensive Content object for docx_template
+    final content = Content();
+
+    // --- Build table for work instructions ---
+    final List<Map<String, String>> workInstructions = [
+      {
+        'title': 'Work Instruction 1',
+        'id': '123456',
+        'description':
+            'Description of work instruction 1', // This might not exist in template
+        'asset': 'Asset 1'
+      },
+      {
+        'title': 'Work Instruction 2',
+        'id': '789012',
+        'description':
+            'Description of work instruction 2', // This might not exist in template
+        'asset': 'Asset 2'
+      }
+    ];
+
+    final table = TableContent('table', []);
+    for (int i = 0; i < workInstructions.length; i++) {
+      final wi = workInstructions[i];
+      final row = RowContent();
+
+      // Add all fields - the system will handle missing tags gracefully by rendering empty content
+      row.add(TextContent('title', wi['title'] ?? ''));
+      row.add(TextContent('id', wi['id'] ?? ''));
+      row.add(TextContent('description',
+          wi['description'] ?? '')); // Will be handled gracefully if missing
+      row.add(TextContent('asset', wi['asset'] ?? ''));
+
+      print(
+          'Row $i: title="${wi['title']}", id="${wi['id']}", description="${wi['description']}", asset="${wi['asset']}"');
+      table.addRow(row);
+    }
+
+    print('Total rows added: ${table.rows.length}');
+
+    // Add the table to content
+    content.add(table);
+
+    final d = await docx.generate(content,
+        imagePolicy: ImagePolicy.remove, tagPolicy: TagPolicy.saveText);
+    if (d != null) await fileGenerated.writeAsBytes(d);
+    expect(await fileGenerated.exists(), true);
+  });
 }

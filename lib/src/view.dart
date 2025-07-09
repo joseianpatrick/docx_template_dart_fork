@@ -349,9 +349,11 @@ class RowView extends View<TableContent?> {
       XmlElement copy = XmlCopyVisitor().visitElement(this)!;
       l = List.from(copy.children);
     } else {
-      for (var cont in c.rows) {
+      for (var i = 0; i < c.rows.length; i++) {
+        var cont = c.rows[i];
         View copy = XmlCopyVisitor().visitElement(this) as View;
-        for (var v in copy.childrensView) {
+        for (var j = 0; j < copy.childrensView.length; j++) {
+          var v = copy.childrensView[j];
           vm._produceInner(cont, v);
         }
         l.addAll(copy.children.cast<XmlElement>());

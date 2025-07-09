@@ -75,7 +75,9 @@ class ViewManager {
           var sdtV = SdtView.parse(c);
           if (sdtV != null) {
             var v = _initView(sdtV, parent);
-            if (v != null) _init(v, v);
+            if (v != null) {
+              _init(v, v);
+            }
           }
         } else {
           _init(c, parent);
@@ -87,7 +89,11 @@ class ViewManager {
   View? _initView(SdtView sdtView, View parent) {
     const tags = ["table", "plain", "text", "list", "img", "link"];
     View? v;
-    if (tags.contains(sdtView.tag)) {
+
+    // Treat any tag not in the standard list as a text element
+    bool isTextTag = sdtView.tag == "text" || !tags.contains(sdtView.tag);
+
+    if (tags.contains(sdtView.tag) || isTextTag) {
       final sdtParent = sdtView.sdt.parent!;
       final sdtIndex = sdtParent.children.indexOf(sdtView.sdt);
       final sdtChilds = sdtView.content.children.toList();
@@ -118,6 +124,13 @@ class ViewManager {
         case "link":
           v = TextView(XmlName("link"), [], sdtChilds, false, sdtView.name,
               sdtView, [], parent);
+          break;
+        default:
+          // Treat unknown tags as text elements
+          if (isTextTag) {
+            v = TextView(XmlName("text"), [], sdtChilds, false, sdtView.name,
+                sdtView, [], parent);
+          }
           break;
       }
 
@@ -175,7 +188,7 @@ class ViewManager {
     if (sub != null) {
       for (var key in sub.keys) {
         for (var v in sub[key]!) {
-          _produceInner(content, v);
+          _produceInner(content.sub[key], v);
         }
       }
     }
@@ -184,6 +197,15 @@ class ViewManager {
   List<XmlElement> _produceInner(Content? c, View v) {
     _viewStack.addFirst(v);
     List<XmlElement> produced;
+
+    // Add debugging for table processing
+    if (c is RowContent) {
+      if (c.containsKey(v.tag)) {
+        final content = c[v.tag];
+        if (content is TextContent) {}
+      }
+    }
+
     if (c != null && c.containsKey(v.tag)) {
       produced = v.produce(this, c[v.tag]);
     } else if (c != null && c.key == v.tag) {
